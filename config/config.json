@@ -1,0 +1,17 @@
+{
+    "project_name": "Query-Bong",
+    "version": "1.0.0",
+    "database": {
+        "path": "data/db/sql_queries.db",
+        "generated_path": "data/db/query_rebuilder.db"
+    },
+    "catalog": {
+        "output_path": "docs/QUERY_CATALOG.md"
+    },
+    "templates": {
+        "path": "data/templates"
+    },
+    "source": {
+        "path": "data/source"
+    }
+}

@@ -1,0 +1,162 @@
+{
+  "query_id": "v_unit_test",
+  "question": "노선의 승차 로그 (LEFT JOIN 테스트)",
+  "description": "설명 없음",
+  "unit_type": "unitA",
+  "unit_description": "단순 테이블",
+  "entities": [
+    "T",
+    "R"
+  ],
+  "presentation_type": "table",
+  "presentation_config": {
+    "chart_type": "table",
+    "title": "조회 결과"
+  },
+  "presentation_presets": {
+    "basic": [
+      {
+        "alias": "trip_id",
+        "expression": "T.trip_id",
+        "table": "T",
+        "column": "trip_id",
+        "aggregation": null
+      },
+      {
+        "alias": "base_date",
+        "expression": "T.base_date",
+        "table": "T",
+        "column": "base_date",
+        "aggregation": null
+      },
+      {
+        "alias": "route_nm",
+        "expression": "R.route_nm",
+        "table": "R",
+        "column": "route_nm",
+        "aggregation": null
+      }
+    ],
+    "detail": [
+      {
+        "alias": "trip_id",
+        "expression": "T.trip_id",
+        "table": "T",
+        "column": "trip_id",
+        "aggregation": null
+      },
+      {
+        "alias": "base_date",
+        "expression": "T.base_date",
+        "table": "T",
+        "column": "base_date",
+        "aggregation": null
+      },
+      {
+        "alias": "route_nm",
+        "expression": "R.route_nm",
+        "table": "R",
+        "column": "route_nm",
+        "aggregation": null
+      }
+    ],
+    "all": [
+      {
+        "alias": "trip_id",
+        "expression": "T.trip_id",
+        "table": "T",
+        "column": "trip_id",
+        "aggregation": null
+      },
+      {
+        "alias": "base_date",
+        "expression": "T.base_date",
+        "table": "T",
+        "column": "base_date",
+        "aggregation": null
+      },
+      {
+        "alias": "route_nm",
+        "expression": "R.route_nm",
+        "table": "R",
+        "column": "route_nm",
+        "aggregation": null
+      }
+    ]
+  },
+  "sql": {
+    "original": "\n    SELECT \n        T.trip_id,\n        T.base_date,\n        R.route_nm\n    FROM Trip_Log T\n    LEFT JOIN Route_Master R ON T.route_id = R.route_id\n    WHERE T.base_date = '20251219'\n    ",
+    "normalized": "\n    SELECT \n        Trip_Log.trip_id,\n        Trip_Log.base_date,\n        Route_Master.route_nm\n    FROM Trip_Log\n    LEFT JOIN Route_Master ON Trip_Log.route_id = Route_Master.route_id\n    WHERE Trip_Log.base_date = '20251219'\n    ",
+    "structure": {
+      "select_columns": [
+        {
+          "alias": "trip_id",
+          "expression": "T.trip_id",
+          "table": "T",
+          "column": "trip_id",
+          "aggregation": null
+        },
+        {
+          "alias": "base_date",
+          "expression": "T.base_date",
+          "table": "T",
+          "column": "base_date",
+          "aggregation": null
+        },
+        {
+          "alias": "route_nm",
+          "expression": "R.route_nm",
+          "table": "R",
+          "column": "route_nm",
+          "aggregation": null
+        }
+      ],
+      "from_table": "Trip_Log",
+      "joins": [
+        {
+          "type": "LEFT JOIN",
+          "table": "Route_Master",
+          "on_condition": "T.route_id = R.route_id",
+          "relationship": "T.route_id = R.route_id"
+        }
+      ],
+      "where_conditions": [
+        {
+          "column": "T.base_date",
+          "operator": "=",
+          "value": "'20251219'",
+          "type": "partition_key"
+        }
+      ],
+      "group_by": [],
+      "order_by": []
+    }
+  },
+  "relationships": {
+    "fixed": true,
+    "description": "Trip_Log를 중심으로 Route_Master를 조인",
+    "join_graph": [
+      "Trip_Log -> Route_Master (T.route_id = R.route_id)"
+    ]
+  },
+  "parameters": {
+    "modifiable": [
+      "base_date"
+    ],
+    "fixed": [
+      "joins",
+      "select_columns",
+      "group_by"
+    ],
+    "template": "노선의_승차_로그_(LEFT_JOIN_테스트)"
+  },
+  "metadata": {
+    "created_at": "2025-12-25T17:02:44.945470",
+    "tags": [
+      "T",
+      "R"
+    ],
+    "complexity": "low",
+    "estimated_rows": "< 100"
+  }
+}

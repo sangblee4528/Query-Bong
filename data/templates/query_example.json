@@ -1,0 +1,183 @@
+{
+  "query_id": "example",
+  "question": "example query",
+  "description": "example_query.sql 파일에서 로드됨",
+  "unit_type": "unitC",
+  "unit_description": "복합 정보 (R + S + T)",
+  "entities": [
+    "R",
+    "S",
+    "T"
+  ],
+  "presentation_type": "table_with_chart",
+  "presentation_config": {
+    "chart_type": "bar",
+    "x_axis": "route_nm AS '노선명",
+    "y_axis": "trip_id",
+    "title": "집계 결과"
+  },
+  "presentation_presets": {
+    "basic": [
+      {
+        "alias": "route_nm AS '노선명",
+        "expression": "R.route_nm AS '노선명",
+        "table": "R",
+        "column": "route_nm AS '노선명",
+        "aggregation": null
+      },
+      {
+        "alias": "station_nm AS '정류장명",
+        "expression": "S.station_nm AS '정류장명",
+        "table": "S",
+        "column": "station_nm AS '정류장명",
+        "aggregation": null
+      },
+      {
+        "alias": "trip_id",
+        "expression": "COUNT(T.trip_id) AS '이용건수",
+        "table": "T",
+        "column": "trip_id",
+        "aggregation": "COUNT"
+      }
+    ],
+    "detail": [
+      {
+        "alias": "route_nm AS '노선명",
+        "expression": "R.route_nm AS '노선명",
+        "table": "R",
+        "column": "route_nm AS '노선명",
+        "aggregation": null
+      },
+      {
+        "alias": "station_nm AS '정류장명",
+        "expression": "S.station_nm AS '정류장명",
+        "table": "S",
+        "column": "station_nm AS '정류장명",
+        "aggregation": null
+      },
+      {
+        "alias": "trip_id",
+        "expression": "COUNT(T.trip_id) AS '이용건수",
+        "table": "T",
+        "column": "trip_id",
+        "aggregation": "COUNT"
+      }
+    ],
+    "all": [
+      {
+        "alias": "route_nm AS '노선명",
+        "expression": "R.route_nm AS '노선명",
+        "table": "R",
+        "column": "route_nm AS '노선명",
+        "aggregation": null
+      },
+      {
+        "alias": "station_nm AS '정류장명",
+        "expression": "S.station_nm AS '정류장명",
+        "table": "S",
+        "column": "station_nm AS '정류장명",
+        "aggregation": null
+      },
+      {
+        "alias": "trip_id",
+        "expression": "COUNT(T.trip_id) AS '이용건수",
+        "table": "T",
+        "column": "trip_id",
+        "aggregation": "COUNT"
+      }
+    ]
+  },
+  "sql": {
+    "original": "SELECT \n    R.route_nm AS '노선명', \n    S.station_nm AS '정류장명', \n    COUNT(T.trip_id) AS '이용건수'\nFROM Trip_Log T\nINNER JOIN Route_Master R ON T.route_id = R.route_id\nINNER JOIN Station_Master S ON T.geton_station_id = S.station_id\nWHERE T.base_date = '20251219'\n  AND R.route_nm = '140'\nGROUP BY R.route_nm, S.station_nm",
+    "normalized": "SELECT \n    Route_Master.route_nm AS '노선명', \n    Station_Master.station_nm AS '정류장명', \n    COUNT(Trip_Log.trip_id) AS '이용건수'\nFROM Trip_Log\nINNER JOIN Route_Master ON Trip_Log.route_id = Route_Master.route_id\nINNER JOIN Station_Master ON Trip_Log.geton_station_id = Station_Master.station_id\nWHERE Trip_Log.base_date = '20251219'\n  AND Route_Master.route_nm = '140'\nGROUP BY Route_Master.route_nm, Station_Master.station_nm",
+    "structure": {
+      "select_columns": [
+        {
+          "alias": "route_nm AS '노선명",
+          "expression": "R.route_nm AS '노선명",
+          "table": "R",
+          "column": "route_nm AS '노선명",
+          "aggregation": null
+        },
+        {
+          "alias": "station_nm AS '정류장명",
+          "expression": "S.station_nm AS '정류장명",
+          "table": "S",
+          "column": "station_nm AS '정류장명",
+          "aggregation": null
+        },
+        {
+          "alias": "trip_id",
+          "expression": "COUNT(T.trip_id) AS '이용건수",
+          "table": "T",
+          "column": "trip_id",
+          "aggregation": "COUNT"
+        }
+      ],
+      "from_table": "Trip_Log",
+      "joins": [
+        {
+          "type": "INNER JOIN",
+          "table": "Route_Master",
+          "on_condition": "T.route_id = R.route_id",
+          "relationship": "T.route_id = R.route_id"
+        },
+        {
+          "type": "INNER JOIN",
+          "table": "Station_Master",
+          "on_condition": "T.geton_station_id = S.station_id",
+          "relationship": "T.geton_station_id = S.station_id"
+        }
+      ],
+      "where_conditions": [
+        {
+          "column": "T.base_date",
+          "operator": "=",
+          "value": "'20251219'",
+          "type": "partition_key"
+        },
+        {
+          "column": "R.route_nm",
+          "operator": "=",
+          "value": "'140'",
+          "type": "filter"
+        }
+      ],
+      "group_by": [
+        "R.route_nm",
+        "S.station_nm"
+      ],
+      "order_by": []
+    }
+  },
+  "relationships": {
+    "fixed": true,
+    "description": "Trip_Log를 중심으로 Route_Master, Station_Master를 조인",
+    "join_graph": [
+      "Trip_Log -> Route_Master (T.route_id = R.route_id)",
+      "Trip_Log -> Station_Master (T.geton_station_id = S.station_id)"
+    ]
+  },
+  "parameters": {
+    "modifiable": [
+      "base_date",
+      "route_nm"
+    ],
+    "fixed": [
+      "joins",
+      "select_columns",
+      "group_by"
+    ],
+    "template": "example_query"
+  },
+  "metadata": {
+    "created_at": "2025-12-25T18:21:30.870520",
+    "tags": [
+      "R",
+      "S",
+      "T"
+    ],
+    "complexity": "high",
+    "estimated_rows": "< 100"
+  }
+}

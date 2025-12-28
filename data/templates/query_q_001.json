@@ -1,0 +1,118 @@
+{
+  "query_id": "q_001",
+  "question": "노선의 정류장별 승차 건수",
+  "description": "특정 버스 노선의 각 정류장별 이용 건수를 집계",
+  "unit_type": "unitA",
+  "unit_description": "단순 테이블",
+  "entities": [],
+  "presentation_type": "table",
+  "presentation_config": {
+    "chart_type": "table",
+    "title": "조회 결과"
+  },
+  "sql": {
+    "original": "\n    SELECT \n        R.route_nm AS '노선명', \n        S.station_nm AS '정류장명', \n        COUNT(T.trip_id) AS '이용건수'\n    FROM Trip_Log T\n    INNER JOIN Route_Master R ON T.route_id = R.route_id\n    INNER JOIN Station_Master S ON T.geton_station_id = S.station_id\n    WHERE T.base_date = '20251219'\n      AND R.route_nm = '140'\n    GROUP BY R.route_nm, S.station_nm\n    ",
+    "normalized": "\n    SELECT \n        Route_Master.route_nm AS '노선명', \n        Station_Master.station_nm AS '정류장명', \n        COUNT(Trip_Log.trip_id) AS '이용건수'\n    FROM Trip_Log\n    INNER JOIN Route_Master ON Trip_Log.route_id = Route_Master.route_id\n    INNER JOIN Station_Master ON Trip_Log.geton_station_id = Station_Master.station_id\n    WHERE Trip_Log.base_date = '20251219'\n      AND Route_Master.route_nm = '140'\n    GROUP BY Route_Master.route_nm, Station_Master.station_nm\n    ",
+    "structure": {
+      "select_columns": [
+        {
+          "alias": "route_nm",
+          "expression": "route_nm",
+          "table": null,
+          "column": "route_nm",
+          "aggregation": null
+        },
+        {
+          "alias": "station_nm",
+          "expression": "station_nm",
+          "table": null,
+          "column": "station_nm",
+          "aggregation": null
+        },
+        {
+          "alias": "COUNT",
+          "expression": "COUNT",
+          "table": null,
+          "column": "COUNT",
+          "aggregation": null
+        },
+        {
+          "alias": "T",
+          "expression": "Trip_Log",
+          "table": null,
+          "column": "Trip_Log",
+          "aggregation": null
+        },
+        {
+          "alias": "R",
+          "expression": "Route_Master",
+          "table": null,
+          "column": "Route_Master",
+          "aggregation": null
+        },
+        {
+          "alias": "S",
+          "expression": "Station_Master",
+          "table": null,
+          "column": "Station_Master",
+          "aggregation": null
+        },
+        {
+          "alias": "route_nm",
+          "expression": "route_nm",
+          "table": null,
+          "column": "route_nm",
+          "aggregation": null
+        },
+        {
+          "alias": "station_nm",
+          "expression": "station_nm",
+          "table": null,
+          "column": "station_nm",
+          "aggregation": null
+        }
+      ],
+      "from_table": "Trip_Log",
+      "joins": [],
+      "where_conditions": [
+        {
+          "column": "T.base_date",
+          "operator": "=",
+          "value": "'20251219'",
+          "type": "partition_key"
+        },
+        {
+          "column": "R.route_nm",
+          "operator": "=",
+          "value": "'140'",
+          "type": "filter"
+        }
+      ],
+      "group_by": [],
+      "order_by": []
+    }
+  },
+  "relationships": {
+    "fixed": true,
+    "description": "Trip_Log를 중심으로 를 조인",
+    "join_graph": []
+  },
+  "parameters": {
+    "modifiable": [
+      "base_date",
+      "route_nm"
+    ],
+    "fixed": [
+      "joins",
+      "select_columns",
+      "group_by"
+    ],
+    "template": "노선의_정류장별_승차_건수"
+  },
+  "metadata": {
+    "created_at": "2025-12-25T04:17:12.403158",
+    "tags": [],
+    "complexity": "low",
+    "estimated_rows": "< 100"
+  }
+}
