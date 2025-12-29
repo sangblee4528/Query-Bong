@@ -30,7 +30,10 @@ if project_root not in sys.path:
 from config.loader import CFG
 
 from mcp.server.fastmcp import FastMCP
-from .llm_query_rebuilder import SQLRebuilder
+try:
+    from .llm_query_rebuilder import SQLRebuilder
+except ImportError:
+    from llm_query_rebuilder import SQLRebuilder
 
 # MCP 서버 초기화
 mcp = FastMCP("SQL-Query-RAG-Server")
@@ -107,7 +110,6 @@ def query_db(query: str, params=(), db_type: str = 'master') -> Any:
 # ============================================================================
 # Tool 1: 쿼리 검색 (자연어)
 # ============================================================================
-@mcp.tool()
 @mcp.tool()
 def search_queries(search_text: str, unit_type: Optional[str] = None) -> str:
     """
