@@ -21,6 +21,7 @@ import sys
 import sqlite3
 import json
 from typing import Optional, List, Dict, Any
+import argparse
 
 # 프로젝트 루트를 Python 경로에 추가 및 설정 로드
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -559,5 +560,25 @@ def execute_query(query_id: str) -> str:
 # 서버 실행
 # ============================================================================
 if __name__ == "__main__":
-    # MCP 서버 실행 (stdio 모드)
-    mcp.run()
+    # 인자 파싱
+    parser = argparse.ArgumentParser(description="SQL Query MCP Server")
+    parser.add_argument("--transport", default="stdio", choices=["stdio", "sse"], help="Transport mode: stdio (default) or sse")
+    parser.add_argument("--port", type=int, default=8000, help="Port for SSE mode (default: 8000)")
+    
+    args, unknown = parser.parse_known_args()
+
+    if args.transport == "sse":
+        print(f"🚀 Starting MCP Server in SSE mode on port {args.port}...", file=sys.stderr)
+        print(f"🔗 SSE Endpoint: http://localhost:{args.port}/sse", file=sys.stderr)
+        print(f"💬 Messages Endpoint: http://localhost:{args.port}/messages", file=sys.stderr)
+        # Use uvicorn directly to allow port configuration
+        import uvicorn
+        try:
+             # FastMCP's sse_app property returns the Starlette application
+             uvicorn.run(mcp.sse_app, host="0.0.0.0", port=args.port)
+        except Exception as e:
+            print(f"Error running SSE: {e}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        # stdio mode (default)
+        mcp.run(transport="stdio")
